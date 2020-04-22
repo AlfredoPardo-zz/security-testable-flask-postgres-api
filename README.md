@@ -12,3 +12,4 @@ You may need to update the `config.yaml` file with the IP address or hostname of
 
 **Note**: You may need to check with `docker network ls` if the network name is correct.
 
+**Postman collection available**
