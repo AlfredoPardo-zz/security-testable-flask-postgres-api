@@ -1,0 +1,8 @@
+jwt:
+    secret_key: j4tS3cReT$
+postgres:
+    username: superset
+    password: superset
+    host: apache-superset_db_1
+    database: superset
+initialize_db: True    

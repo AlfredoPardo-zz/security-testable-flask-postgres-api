@@ -1,0 +1,40 @@
+{
+    "customers": [
+        {
+            "name": "Netflix"
+        }
+    ],
+    "cloud_providers": [
+        {
+            "name": "Amazon Web Services",
+            "abbreviation": "AWS"
+        },
+        {
+            "name": "Microsoft Azure",
+            "abbreviation": "AZURE"
+        },
+        {
+            "name": "Google Cloud Platform",
+            "abbreviation": "GCP"
+        },
+        {
+            "name": "Ali Cloud",
+            "abbreviation": "ALI"
+        }
+    ],
+    "cloud_accounts": [
+        {
+            "name": "YouTube Premium",
+            "customer_uid": "to_be_replaced",
+            "cloud_provider_uid": "to_be_replaced"
+        }
+    ],
+    "users": [
+        {
+            "username": "sfta",
+            "password": "sfta",
+            "name": "SFTA Password Hashed on DB"
+        }
+    ],
+    "hashing_salt": "Keep it safe"
+}
