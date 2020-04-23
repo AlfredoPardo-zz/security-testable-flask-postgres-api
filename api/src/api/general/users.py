@@ -29,12 +29,14 @@ model_auth = api.model("users_auth", {
 
 @api.route('/')
 class Users(Resource):
-   
+    
+    @jwt_required
     @api.marshal_list_with(model)
     def get(self):
         '''Lists all Users'''
         return list(User.query.all()), 200
 
+    @jwt_required
     @api.expect(model)
     @api.marshal_with(model, code=201)
     def post(self):
@@ -53,6 +55,7 @@ class Users(Resource):
 @api.route('/<string:username>')
 class Users_By_Username(Resource):
 
+    @jwt_required
     @api.marshal_with(model)
     def get(self, username):
         '''Shows a User'''
@@ -62,6 +65,7 @@ class Users_By_Username(Resource):
         else: 
             return {}, 404
 
+    @jwt_required
     def delete(self, username):
         '''Deletes a User'''
         
@@ -72,7 +76,8 @@ class Users_By_Username(Resource):
             return {"msg": "{} has been removed.".format(username)}, 200
         else:
             return {"msg": "{} has not been found.".format(username)}, 404
-        
+    
+    @jwt_required
     @api.expect(model)
     @api.marshal_with(model, code=200)
     def put(self, username):
@@ -104,7 +109,9 @@ class Users_Auth(Resource):
                 User.password==content["password"]).first()
             if user:
                 username = user.username
+                print("ACCESS_TOKEN_EXPIRATION: {}".format(ACCESS_TOKEN_EXPIRATION))
                 access_token = create_access_token(identity=username, expires_delta=ACCESS_TOKEN_EXPIRATION)
+                print("REFRESH_TOKEN_EXPIRATION: {}".format(REFRESH_TOKEN_EXPIRATION))
                 refresh_token = create_refresh_token(identity=username, expires_delta=REFRESH_TOKEN_EXPIRATION)
                 return {
                     "access_token": access_token,
@@ -117,7 +124,8 @@ class Users_Auth(Resource):
 
 @api.route('/refresh_auth')
 class Users_Refresh_Auth(Resource):
-
+    
+    @jwt_refresh_token_required
     @api.expect(model_auth)
     def post(self):
         '''Refreshs the Authentication Token for a User'''

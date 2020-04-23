@@ -1,5 +1,6 @@
 from flask_restplus import Resource, Namespace, fields, marshal_with
 from flask import request
+from flask_jwt_extended import jwt_required
 from uuid import uuid4
 from database.models.general.customer import Customer
 from database import db
@@ -14,11 +15,13 @@ model = api.model('customers', {
 @api.route('/')
 class Customers(Resource):
    
+    @jwt_required
     @api.marshal_list_with(model)
     def get(self):
         '''Lists all Customers'''
         return list(Customer.query.all()), 200
 
+    @jwt_required
     @api.expect(model)
     @api.marshal_with(model, code=201)
     def post(self):
@@ -36,6 +39,7 @@ class Customers(Resource):
 @api.route('/<string:uid>')
 class Customers_By_UID(Resource):
 
+    @jwt_required
     @api.marshal_list_with(model)
     def get(self, uid):
         '''Shows a Customer'''
@@ -46,6 +50,7 @@ class Customers_By_UID(Resource):
         else: 
             return {}, 404
 
+    @jwt_required
     def delete(self, uid):
         '''Deletes a Customer'''
         customer = Customer.query.filter(Customer.uid==uid).first()
@@ -57,6 +62,7 @@ class Customers_By_UID(Resource):
         else:
             return {"msg": "{} has not been found.".format(uid)}, 404
         
+    @jwt_required
     @api.expect(model)
     @api.marshal_with(model, code=200)
     def put(self, uid):

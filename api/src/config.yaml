@@ -3,6 +3,7 @@ jwt:
 postgres:
     username: superset
     password: superset
-    host: apache-superset_db_1
+    #host: apache-superset_db_1
+    host: 127.0.0.1
     database: superset
 initialize_db: True    

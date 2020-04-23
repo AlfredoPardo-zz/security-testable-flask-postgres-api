@@ -1,5 +1,6 @@
 from flask_restplus import Resource, Namespace, fields
 from flask import request
+from flask_jwt_extended import jwt_required
 from uuid import uuid4
 from database.models.cloud.cloud_account import CloudAccount
 from database.models.cloud.cloud_provider import CloudProvider
@@ -28,11 +29,13 @@ model_cu = api.model('cloud_accounts_cu', {
 @api.route('/')
 class Cloud_Accounts(Resource):
 
+    @jwt_required
     @api.marshal_list_with(model)
     def get(self):
         '''Lists all Cloud Accounts'''
         return list(CloudAccount.query.all()), 200
 
+    @jwt_required
     @api.expect(model_cu)
     @api.marshal_with(model_cu, code=201)
     def post(self):
@@ -58,6 +61,7 @@ class Cloud_Accounts(Resource):
 @api.route('/<string:uid>')
 class Cloud_Accounts_By_UID(Resource):
 
+    @jwt_required
     @api.marshal_with(model)
     def get(self, uid):
         '''Shows a Cloud Account'''
@@ -68,6 +72,7 @@ class Cloud_Accounts_By_UID(Resource):
         else:
             return {}, 404
 
+    @jwt_required
     def delete(self, uid):
         '''Deletes a Cloud Account'''
         
@@ -80,6 +85,7 @@ class Cloud_Accounts_By_UID(Resource):
         else:
             return {"msg": "{} has not been found.".format(uid)}, 404
         
+    @jwt_required
     @api.expect(model_cu)
     @api.marshal_with(model_cu, code=200)
     def put(self, uid):
